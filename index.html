@@ -673,6 +673,10 @@
             gap: 1.5rem;
         }
 
+        /* Last two cards: center them in the second row */
+        .projects-grid .project-card:nth-child(4) { grid-column: 1 / 2; }
+        .projects-grid .project-card:nth-child(5) { grid-column: 2 / 3; }
+
         .project-card {
             background: #ffffff;
             border: 1px solid rgba(184,146,42,0.15);
@@ -1216,26 +1220,26 @@
         <div class="projects-grid">
             <div class="project-card featured fade-in">
                 <div class="project-icon">🤖</div>
-                <span class="project-tag">AI Automation</span>
-                <h3>Claude Code Deployments</h3>
+                <span class="project-tag">Autonomous Agent</span>
+                <h3>Moltbot</h3>
                 <p>
-                    Exploring the frontier of AI-assisted development — using Claude Code to build, iterate,
-                    and ship faster than traditional workflows allow. From solo projects to full-stack systems,
-                    testing what AI pair programming looks like in practice.
+                    An autonomous AI agent running on a private VPS — integrated with Telegram for
+                    voice interaction and real-time responses. Built to run independently, around the clock,
+                    without human intervention. A step toward truly agentic AI infrastructure.
                 </p>
-                <a href="https://bltg85.github.io/aelg-website/" class="project-link" target="_blank">
-                    View earlier work
+                <a href="https://buildinpublic-logg.pages.dev/" class="project-link" target="_blank">
+                    Read the build log
                     <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
             </div>
 
             <div class="project-card fade-in fade-in-delay-1">
-                <div class="project-icon">📊</div>
-                <span class="project-tag">Analysis</span>
-                <h3>Human + Machine Blog</h3>
+                <div class="project-icon">🛒</div>
+                <span class="project-tag">AI Product</span>
+                <h3>QuestBox</h3>
                 <p>
-                    Documenting the journey of integrating AI into real work — the wins,
-                    the failures, and what it actually takes to become an AI-native operator.
+                    An AI-driven e-commerce engine rebuilt from the ground up with Claude Code.
+                    Live on Vercel — from concept to deployed product in record time.
                 </p>
                 <a href="https://buildinpublic-logg.pages.dev/" class="project-link" target="_blank">
                     Follow along
@@ -1244,12 +1248,40 @@
             </div>
 
             <div class="project-card fade-in fade-in-delay-2">
-                <div class="project-icon">🧩</div>
-                <span class="project-tag">In Play</span>
-                <h3>Next Hand</h3>
+                <div class="project-icon">🎵</div>
+                <span class="project-tag">Rapid Build</span>
+                <h3>Last Gig Finder</h3>
                 <p>
-                    The table is set. New projects and client engagements are being dealt.
-                    Reach out if you want to be at the table.
+                    A music discovery app built in under four minutes with AI.
+                    A proof that the speed of idea-to-product has fundamentally changed.
+                </p>
+                <a href="https://buildinpublic-logg.pages.dev/" class="project-link" target="_blank">
+                    See how it was built
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
+            <div class="project-card fade-in fade-in-delay-3">
+                <div class="project-icon">🏊</div>
+                <span class="project-tag">Micro SaaS</span>
+                <h3>VadKostarBadet.se</h3>
+                <p>
+                    A niche consumer tool that went through real product iteration — AdSense feedback,
+                    user improvements, and the full cycle of building in public.
+                </p>
+                <a href="https://buildinpublic-logg.pages.dev/" class="project-link" target="_blank">
+                    Read the journey
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
+            <div class="project-card fade-in fade-in-delay-4">
+                <div class="project-icon">🧠</div>
+                <span class="project-tag">In Play</span>
+                <h3>AI Council</h3>
+                <p>
+                    A multi-layer AI system with image processing capabilities — currently in development.
+                    The next hand is being dealt.
                 </p>
                 <a href="#contact" class="project-link">
                     Get in touch
