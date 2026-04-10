@@ -1,1446 +1,1219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ace Jack Suited — AI Innovations</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy: #0a1628;
-            --navy-mid: #1a2e4a;
-            --navy-light: #1e3a5f;
-            --navy-card: #0d1a35;
-            --gold: #b8922a;
-            --gold-light: #d4a84c;
-            --gold-dark: #8a6a1a;
-            --gold-faint: rgba(184,146,42,0.08);
-            --green-dark: #d8f0e0;
-            --bg: #f7f4ef;
-            --bg-alt: #eeeae1;
-            --bg-dark: #0a1628;
-            --white: #ffffff;
-            --gray-light: #2c3e55;
-            --gray: #5a6a7e;
-            --gray-dark: #8a9ab0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--gray-light);
-            overflow-x: hidden;
-        }
-
-        /* ─── PARTICLES ─────────────────────────── */
-        #particles {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            background: var(--gold);
-            opacity: 0;
-            animation: floatParticle linear infinite;
-        }
-
-        @keyframes floatParticle {
-            0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-            10%  { opacity: 0.4; }
-            90%  { opacity: 0.2; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-        }
-
-        /* ─── NAVIGATION ─────────────────────────── */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 100;
-            padding: 1.2rem 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: linear-gradient(180deg, rgba(247,244,239,0.97) 0%, rgba(247,244,239,0) 100%);
-            backdrop-filter: blur(4px);
-            transition: background 0.3s;
-        }
-
-        nav.scrolled {
-            background: rgba(247,244,239,0.98);
-            border-bottom: 1px solid rgba(184,146,42,0.2);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-        }
-
-        .nav-brand img {
-            height: 40px;
-            width: auto;
-        }
-
-        .nav-brand-text {
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--gold);
-            letter-spacing: 0.08em;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2.5rem;
-        }
-
-        .nav-links a {
-            font-size: 0.8rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--gray);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-
-        /* ─── HERO ─────────────────────────── */
-        #hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 6rem 2rem 4rem;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 80% 60% at 50% 40%, rgba(184,146,42,0.07) 0%, transparent 70%),
-                radial-gradient(ellipse 50% 80% at 20% 80%, rgba(200,220,210,0.3) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 60% at 80% 20%, rgba(220,215,200,0.4) 0%, transparent 60%);
-        }
-
-        /* Suit watermarks */
-        .suit-mark {
-            position: absolute;
-            font-size: 18rem;
-            opacity: 0.02;
-            color: var(--gold);
-            user-select: none;
-            pointer-events: none;
-            font-family: serif;
-        }
-        .suit-mark.top-left  { top: -4rem;  left: -3rem; }
-        .suit-mark.bot-right { bottom: -4rem; right: -3rem; transform: rotate(180deg); }
-
-        .hero-logo {
-            width: min(180px, 35vw);
-            height: auto;
-            margin-bottom: 2.5rem;
-            filter: drop-shadow(0 8px 30px rgba(0,0,0,0.12));
-            animation: heroFloat 6s ease-in-out infinite;
-        }
-
-        @keyframes heroFloat {
-            0%, 100% { transform: translateY(0);    filter: drop-shadow(0 8px 30px rgba(0,0,0,0.12)); }
-            50%       { transform: translateY(-12px); filter: drop-shadow(0 16px 40px rgba(0,0,0,0.18)); }
-        }
-
-        .hero-eyebrow {
-            font-size: 0.7rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-
-        .hero-title {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(2.8rem, 8vw, 5.5rem);
-            font-weight: 700;
-            line-height: 1.1;
-            color: var(--navy);
-            letter-spacing: 0.04em;
-            margin-bottom: 0.5rem;
-        }
-
-        .hero-title span {
-            color: var(--gold);
-        }
-
-        .hero-subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
-            font-weight: 400;
-            letter-spacing: 0.25em;
-            color: var(--gold);
-            margin-bottom: 2.5rem;
-            text-transform: uppercase;
-        }
-
-        .hero-tagline {
-            max-width: 560px;
-            font-size: 1.05rem;
-            font-weight: 300;
-            line-height: 1.8;
-            color: var(--gray);
-            margin-bottom: 3.5rem;
-        }
-
-        .hero-tagline em {
-            color: var(--navy);
-            font-style: normal;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn-primary {
-            padding: 0.85rem 2.2rem;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
-            color: var(--navy);
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.25s;
-            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(201,168,76,0.3);
-        }
-
-        .btn-outline {
-            padding: 0.85rem 2.2rem;
-            background: transparent;
-            color: var(--gold);
-            font-size: 0.78rem;
-            font-weight: 500;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            text-decoration: none;
-            border: 1px solid rgba(201,168,76,0.4);
-            cursor: pointer;
-            transition: all 0.25s;
-            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-        }
-
-        .btn-outline:hover {
-            background: var(--gold-faint);
-            border-color: var(--gold);
-            transform: translateY(-2px);
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0.4;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .scroll-indicator span {
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--gray);
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 40px;
-            background: linear-gradient(180deg, var(--gold) 0%, transparent 100%);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
-            50% { opacity: 0.7; transform: translateX(-50%) translateY(4px); }
-        }
-
-        /* ─── SECTIONS GENERAL ─────────────────────────── */
-        section {
-            position: relative;
-            z-index: 1;
-        }
-
-        .section-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 6rem 4rem;
-        }
-
-        .section-eyebrow {
-            font-size: 0.68rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-
-        .section-title {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
-            font-weight: 600;
-            color: var(--navy);
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-divider {
-            width: 60px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
-            margin-bottom: 1.5rem;
-        }
-
-        /* ─── THE HAND ─────────────────────────── */
-        #the-hand {
-            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 50%, var(--bg) 100%);
-        }
-
-        #the-hand .section-inner {
-            text-align: center;
-        }
-
-        .hand-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-top: 4rem;
-        }
-
-        .hand-card {
-            background: linear-gradient(135deg, #ffffff 0%, #faf8f4 100%);
-            border: 1px solid rgba(184,146,42,0.18);
-            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-            padding: 2.5rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.35s ease;
-            cursor: default;
-        }
-
-        .hand-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            opacity: 0;
-            transition: opacity 0.35s;
-        }
-
-        .hand-card:hover {
-            border-color: rgba(184,146,42,0.45);
-            transform: translateY(-6px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.12), 0 0 30px rgba(184,146,42,0.1);
-        }
-
-        .hand-card:hover::before {
-            opacity: 1;
-        }
-
-        .card-rank {
-            font-family: 'Cinzel', serif;
-            font-size: 4rem;
-            font-weight: 700;
-            color: var(--gold);
-            line-height: 1;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 40px rgba(201,168,76,0.4);
-        }
-
-        .card-suit {
-            font-size: 1.4rem;
-            color: var(--gold-dark);
-            margin-bottom: 1.5rem;
-        }
-
-        .card-label {
-            font-family: 'Cinzel', serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--navy);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid rgba(201,168,76,0.15);
-            padding-bottom: 1rem;
-        }
-
-        .card-desc {
-            font-size: 0.88rem;
-            font-weight: 300;
-            color: var(--gray);
-            line-height: 1.7;
-        }
-
-        /* ─── PHILOSOPHY ─────────────────────────── */
-        #philosophy {
-            background: linear-gradient(135deg, #0a1628 0%, #0f2a1a 100%);
-        }
-
-        .philosophy-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
-            align-items: center;
-        }
-
-        .philosophy-quote {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(1.2rem, 2.5vw, 1.7rem);
-            font-weight: 400;
-            font-style: italic;
-            color: #e8c87a;
-            line-height: 1.5;
-            margin-bottom: 2rem;
-        }
-
-        .philosophy-quote::before {
-            content: '"';
-            display: block;
-            font-size: 4rem;
-            color: var(--gold);
-            opacity: 0.4;
-            line-height: 0.8;
-            margin-bottom: 0.5rem;
-        }
-
-        .philosophy-text {
-            font-size: 0.95rem;
-            font-weight: 300;
-            line-height: 1.9;
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-
-        .philosophy-text em {
-            color: #e8edf4;
-            font-style: normal;
-        }
-
-        .philosophy-visual {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ring-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-        }
-
-        .ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(201,168,76,0.2);
-        }
-
-        .ring-1 { inset: 0; animation: ringPulse 4s ease-in-out infinite; }
-        .ring-2 { inset: 20px; animation: ringPulse 4s ease-in-out 0.6s infinite; }
-        .ring-3 { inset: 40px; animation: ringPulse 4s ease-in-out 1.2s infinite; }
-
-        @keyframes ringPulse {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.03); }
-        }
-
-        .ring-center {
-            position: absolute;
-            inset: 60px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.04) 60%, transparent 100%);
-            border: 1px solid rgba(201,168,76,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ring-center-text {
-            font-family: 'Cinzel', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--gold);
-            text-shadow: 0 0 30px rgba(201,168,76,0.6);
-        }
-
-        /* ─── SERVICES ─────────────────────────── */
-        #services {
-            background: var(--bg-alt);
-        }
-
-        .services-intro {
-            max-width: 600px;
-            margin-bottom: 4rem;
-        }
-
-        .services-intro p {
-            font-size: 1rem;
-            font-weight: 300;
-            line-height: 1.8;
-            color: var(--gray);
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-
-        .service-item {
-            background: #ffffff;
-            border: 1px solid rgba(184,146,42,0.15);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-            padding: 2.2rem 2rem;
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-            transition: all 0.3s ease;
-        }
-
-        .service-item:hover {
-            border-color: rgba(184,146,42,0.4);
-            background: #fffdf7;
-            transform: translateX(4px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
-        .service-number {
-            font-family: 'Cinzel', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: rgba(201,168,76,0.25);
-            line-height: 1;
-            min-width: 2.5rem;
-        }
-
-        .service-content h3 {
-            font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--navy);
-            letter-spacing: 0.06em;
-            margin-bottom: 0.6rem;
-        }
-
-        .service-content p {
-            font-size: 0.85rem;
-            font-weight: 300;
-            color: var(--gray);
-            line-height: 1.7;
-        }
-
-        /* ─── APPROACH ─────────────────────────── */
-        #approach {
-            background: var(--bg);
-        }
-
-        #approach .section-inner {
-            text-align: center;
-        }
-
-        .approach-steps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0;
-            margin-top: 4rem;
-            position: relative;
-        }
-
-        .approach-steps::before {
-            content: '';
-            position: absolute;
-            top: 2.5rem;
-            left: 12.5%;
-            right: 12.5%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
-        }
-
-        .approach-step {
-            padding: 0 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .step-number {
-            width: 5rem;
-            height: 5rem;
-            border: 1px solid rgba(184,146,42,0.35);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            background: var(--bg);
-            position: relative;
-            z-index: 1;
-        }
-
-        .step-number span {
-            font-family: 'Cinzel', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--gold);
-        }
-
-        .approach-step h3 {
-            font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--navy);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-        }
-
-        .approach-step p {
-            font-size: 0.82rem;
-            font-weight: 300;
-            color: var(--gray);
-            line-height: 1.7;
-        }
-
-        /* ─── PROJECTS ─────────────────────────── */
-        #projects {
-            background: var(--bg-alt);
-        }
-
-        .projects-header {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-
-
-        .project-card {
-            background: #ffffff;
-            border: 1px solid rgba(184,146,42,0.15);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.35s ease;
-        }
-
-        .project-card.featured {
-            grid-column: span 2;
-            border-color: rgba(184,146,42,0.3);
-        }
-
-        .project-card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            transition: left 0.4s ease;
-        }
-
-        .project-card:hover::after {
-            left: 100%;
-        }
-
-        .project-card:hover {
-            border-color: rgba(184,146,42,0.4);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-        }
-
-        .project-icon {
-            font-size: 1.8rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .project-tag {
-            display: inline-block;
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--gold);
-            background: rgba(201,168,76,0.08);
-            border: 1px solid rgba(201,168,76,0.2);
-            padding: 0.25rem 0.7rem;
-            margin-bottom: 1rem;
-        }
-
-        .project-card h3 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--navy);
-            margin-bottom: 0.75rem;
-        }
-
-        .project-card p {
-            font-size: 0.85rem;
-            font-weight: 300;
-            color: var(--gray);
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .project-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--gold);
-            text-decoration: none;
-            transition: gap 0.2s;
-        }
-
-        .project-link:hover {
-            gap: 0.8rem;
-        }
-
-        .project-link svg {
-            width: 14px;
-            height: 14px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 2;
-        }
-
-        /* ─── CONTACT ─────────────────────────── */
-        #contact {
-            background: linear-gradient(135deg, #0a1628 0%, #0f2a1a 50%, #0a1628 100%);
-        }
-
-        #contact .section-inner {
-            text-align: center;
-        }
-
-        .contact-tagline {
-            font-size: 1.05rem;
-            font-weight: 300;
-            color: var(--gray);
-            max-width: 500px;
-            margin: 0 auto 3rem;
-            line-height: 1.8;
-        }
-
-        .contact-ways {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 4rem;
-        }
-
-        .contact-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(201,168,76,0.2);
-            padding: 2rem 2.5rem;
-            text-align: center;
-            min-width: 200px;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: block;
-        }
-
-        .contact-card:hover {
-            border-color: rgba(201,168,76,0.5);
-            background: rgba(255,255,255,0.09);
-            transform: translateY(-4px);
-        }
-
-        .contact-card-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .contact-card h4 {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--white);
-            letter-spacing: 0.1em;
-            margin-bottom: 0.4rem;
-        }
-
-        .contact-card p {
-            font-size: 0.78rem;
-            color: var(--gray);
-        }
-
-        /* ─── FOOTER ─────────────────────────── */
-        footer {
-            position: relative;
-            z-index: 1;
-            border-top: 1px solid rgba(184,146,42,0.15);
-            padding: 3rem 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--bg-alt);
-        }
-
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .footer-brand img {
-            height: 36px;
-            width: auto;
-            opacity: 0.8;
-        }
-
-        .footer-brand-text {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            color: var(--gold-dark);
-            letter-spacing: 0.12em;
-        }
-
-        .footer-center {
-            font-family: 'Cinzel', serif;
-            font-size: 0.8rem;
-            color: var(--gray);
-            letter-spacing: 0.15em;
-            text-align: center;
-        }
-
-        .footer-right {
-            font-size: 0.75rem;
-            color: var(--gray-dark);
-        }
-
-        /* ─── FADE IN ANIMATIONS ─────────────────────────── */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .fade-in-delay-1 { transition-delay: 0.1s; }
-        .fade-in-delay-2 { transition-delay: 0.2s; }
-        .fade-in-delay-3 { transition-delay: 0.3s; }
-        .fade-in-delay-4 { transition-delay: 0.4s; }
-
-        /* ─── HAMBURGER ─────────────────────────── */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            gap: 5px;
-            width: 2rem;
-            height: 2rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 200;
-        }
-
-        .hamburger span {
-            display: block;
-            height: 2px;
-            background: var(--navy);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .hamburger.open span:nth-child(2) { opacity: 0; }
-        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(247,244,239,0.98);
-            z-index: 150;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2.5rem;
-        }
-
-        .mobile-menu.open {
-            display: flex;
-        }
-
-        .mobile-menu a {
-            font-family: 'Cinzel', serif;
-            font-size: 1.4rem;
-            font-weight: 500;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--navy);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .mobile-menu a:hover {
-            color: var(--gold);
-        }
-
-        /* ─── RESPONSIVE ─────────────────────────── */
-        @media (max-width: 900px) {
-            nav { padding: 1.2rem 2rem; }
-            .nav-links { display: none; }
-            .hamburger { display: flex; }
-            .section-inner { padding: 4rem 2rem; }
-            .hand-grid { grid-template-columns: 1fr; gap: 1rem; }
-            .philosophy-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .philosophy-visual { display: none; }
-            .services-grid { grid-template-columns: 1fr; }
-            .approach-steps { grid-template-columns: repeat(2, 1fr); }
-            .approach-steps::before { display: none; }
-            .projects-grid { grid-template-columns: 1fr; }
-            .project-card.featured { grid-column: span 1; }
-            footer { flex-direction: column; gap: 1.5rem; text-align: center; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ace Jack Suited — AI Innovations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & tokens ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f7f5f1;
+      --bg-alt:    #efece6;
+      --ink:       #141210;
+      --ink-mid:   #3d3830;
+      --ink-soft:  #7a7368;
+      --gold:      #b8882a;
+      --gold-lt:   #d4a84c;
+      --gold-faint:rgba(184,136,42,0.10);
+      --border:    rgba(0,0,0,0.08);
+      --white:     #ffffff;
+      --radius:    2px;
+      --transition: 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Utilities ───────────────────────────────────────── */
+    .eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-wrap {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 0 3rem;
+    }
+
+    /* ── Scroll reveals ──────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s var(--transition), transform 0.7s var(--transition);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 1.4rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    nav.scrolled {
+      background: rgba(247,245,241,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+    .nav-logo img { height: 34px; width: auto; }
+    .nav-logo-text {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2.8rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      color: var(--ink-soft);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    .nav-cta {
+      font-size: 0.75rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.1em !important;
+      color: var(--white) !important;
+      background: var(--ink);
+      padding: 0.6rem 1.4rem;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s !important;
+    }
+    .nav-cta:hover { background: var(--gold) !important; }
+
+    /* Mobile nav */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--ink);
+      transition: var(--transition);
+    }
+
+    /* ── Hero ─────────────────────────────────────────────── */
+    #hero {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding-top: 6rem;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      padding: 6rem 4rem 6rem 3rem;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(184,136,42,0.3);
+      padding: 0.4rem 0.9rem;
+      border-radius: 2px;
+      margin-bottom: 2.4rem;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.6); }
+    }
+
+    .hero-h1 {
+      font-size: clamp(3.2rem, 5.5vw, 5.8rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 1.8rem;
+    }
+    .hero-h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--ink-soft);
+      max-width: 52ch;
+      margin-bottom: 3rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      color: var(--white);
+      background: var(--ink);
+      padding: 0.9rem 2rem;
+      border-radius: 2px;
+      transition: background var(--transition), transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--gold); }
+    .btn-primary:active { transform: translateY(1px) scale(0.99); }
+
+    .btn-ghost {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--border);
+      padding: 0.9rem 2rem;
+      border-radius: 2px;
+      transition: border-color var(--transition), background var(--transition), transform 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--ink); background: var(--ink); color: var(--white); }
+    .btn-ghost:active { transform: translateY(1px) scale(0.99); }
+
+    .hero-right {
+      position: relative;
+      height: 100%;
+      min-height: 100dvh;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-right-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .hero-logo {
+      width: min(220px, 40%);
+      height: auto;
+      animation: float 7s ease-in-out infinite;
+      filter: drop-shadow(0 20px 60px rgba(184,136,42,0.3));
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+
+    .hero-suits {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .suit {
+      position: absolute;
+      font-size: 12rem;
+      opacity: 0.04;
+      color: var(--gold);
+      user-select: none;
+      font-family: serif;
+    }
+    .suit-1 { top: 5%; left: 5%; }
+    .suit-2 { bottom: 5%; right: 5%; transform: rotate(180deg); }
+    .suit-3 { top: 40%; right: 10%; font-size: 6rem; opacity: 0.06; }
+
+    .hero-stat-row {
+      margin-top: 2.8rem;
+      display: flex;
+      gap: 2rem;
+      padding-top: 2.8rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.5);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      font-weight: 400;
+    }
+    .hero-stat strong {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── About ───────────────────────────────────────────── */
+    #about {
+      padding: 9rem 0;
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 8rem;
+      align-items: center;
+    }
+
+    .about-left h2 {
+      font-size: clamp(2.4rem, 3.5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 1.8rem;
+    }
+    .about-left h2 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+
+    .about-left p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      max-width: 48ch;
+    }
+
+    .cards-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .play-card {
+      background: var(--ink);
+      color: var(--white);
+      border-radius: 8px;
+      padding: 2.2rem 1.6rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition);
+    }
+    .play-card:hover { transform: translateY(-4px); }
+    .play-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(184,136,42,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .play-card-rank {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .play-card-suit {
+      font-size: 1.4rem;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 1.2rem;
+    }
+    .play-card-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+    .play-card p {
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+    }
+
+    /* ── Services ────────────────────────────────────────── */
+    #services {
+      padding: 9rem 0;
+      background: var(--bg);
+    }
+
+    .services-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+      margin-bottom: 5rem;
+    }
+    .services-head h2 {
+      font-size: clamp(2.4rem, 3.5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--ink);
+    }
+    .services-head p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      max-width: 52ch;
+    }
+
+    .services-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .service-row {
+      padding: 2.8rem 0;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 2rem;
+      align-items: start;
+      transition: background var(--transition);
+    }
+    .service-row:nth-child(odd) { padding-right: 4rem; border-right: 1px solid var(--border); }
+    .service-row:nth-child(even) { padding-left: 4rem; }
+    .service-row:hover { background: var(--gold-faint); }
+
+    .service-num {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      padding-top: 0.25rem;
+    }
+    .service-row h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.7rem;
+      letter-spacing: -0.01em;
+    }
+    .service-row p {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      font-weight: 300;
+    }
+
+    /* ── Approach ────────────────────────────────────────── */
+    #approach {
+      padding: 9rem 0;
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    #approach .eyebrow { color: var(--gold); }
+
+    .approach-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 5rem;
+    }
+    .approach-head h2 {
+      font-size: clamp(2.4rem, 3.5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--white);
+    }
+    .approach-head p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.5);
+      max-width: 52ch;
+      align-self: end;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .step {
+      padding: 2.8rem 2.8rem 2.8rem 0;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .step:last-child { border-right: none; padding-right: 0; padding-left: 2.8rem; }
+    .step:nth-child(2), .step:nth-child(3) { padding-left: 2.8rem; }
+
+    .step-n {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      margin-bottom: 1.4rem;
+      display: block;
+    }
+    .step h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.01em;
+    }
+    .step p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+    }
+
+    /* ── Projects ────────────────────────────────────────── */
+    #projects {
+      padding: 9rem 0;
+      background: var(--bg-alt);
+    }
+
+    .projects-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+      gap: 2rem;
+    }
+    .projects-head h2 {
+      font-size: clamp(2.4rem, 3.5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--ink);
+    }
+
+    .link-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      color: var(--ink);
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 2px;
+      transition: color 0.2s, gap 0.2s;
+      white-space: nowrap;
+    }
+    .link-arrow:hover { color: var(--gold); gap: 0.8rem; }
+
+    /* Asymmetric project grid — not 3-equal-columns */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.2rem;
+    }
+
+    .project-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      text-decoration: none;
+      color: inherit;
+    }
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px -10px rgba(0,0,0,0.1);
+      border-color: rgba(184,136,42,0.3);
+    }
+    .project-card:active { transform: translateY(-1px) scale(0.995); }
+
+    .project-card.featured {
+      grid-row: span 2;
+      background: var(--ink);
+      color: var(--white);
+      border-color: transparent;
+    }
+    .project-card.featured .proj-tag { color: var(--gold); border-color: rgba(184,136,42,0.3); }
+    .project-card.featured h3 { color: var(--white); }
+    .project-card.featured p { color: rgba(255,255,255,0.5); }
+    .project-card.featured .proj-link { color: var(--gold); }
+
+    .proj-tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border: 1px solid var(--border);
+      padding: 0.28rem 0.65rem;
+      border-radius: 2px;
+      align-self: flex-start;
+    }
+
+    .project-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .project-card.featured h3 { font-size: 1.8rem; }
+
+    .project-card p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      font-weight: 300;
+      flex: 1;
+    }
+
+    .proj-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      margin-top: auto;
+      transition: gap 0.2s, color 0.2s;
+    }
+    .proj-link:hover { gap: 0.7rem; color: var(--gold); }
+    .proj-link svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* Second row: 1fr 1fr 1fr for 3 remaining + 2 span */
+    .project-card:nth-child(2) { grid-column: 2; }
+    .project-card:nth-child(3) { grid-column: 3; }
+    .project-card:nth-child(4) { grid-column: 2; }
+    .project-card:nth-child(5) { grid-column: 3; }
+
+    /* Extra projects strip */
+    .projects-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
+
+    /* ── Contact ─────────────────────────────────────────── */
+    #contact {
+      padding: 9rem 0;
+      background: var(--white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
+      align-items: center;
+    }
+
+    .contact-left h2 {
+      font-size: clamp(2.4rem, 3.5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 1.4rem;
+    }
+    .contact-left p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      max-width: 50ch;
+      margin-bottom: 2.4rem;
+    }
+
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      padding: 1.6rem 2rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--ink);
+      transition: border-color var(--transition), transform var(--transition), background var(--transition);
+    }
+    .contact-item:hover {
+      border-color: var(--gold);
+      background: var(--gold-faint);
+      transform: translateX(4px);
+    }
+    .contact-item:active { transform: translateX(2px) scale(0.99); }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--ink);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-icon svg {
+      width: 18px; height: 18px;
+      stroke: var(--gold); fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .contact-item-text strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+    .contact-item-text span {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+    }
+
+    .contact-item-arrow {
+      margin-left: auto;
+      font-size: 1rem;
+      color: var(--ink-soft);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .contact-item:hover .contact-item-arrow { color: var(--gold); transform: translateX(3px); }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    footer {
+      padding: 2.4rem 3rem;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .footer-brand img { height: 26px; width: auto; opacity: 0.85; }
+    .footer-brand span {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-tagline {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* ── Mobile ──────────────────────────────────────────── */
+    @media (max-width: 1000px) {
+      .section-wrap { padding: 0 1.5rem; }
+
+      #hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .hero-right {
+        min-height: 50dvh;
+      }
+      .hero-left { padding: 8rem 1.5rem 4rem; }
+
+      .about-grid,
+      .services-head,
+      .approach-head,
+      .contact-grid { grid-template-columns: 1fr; gap: 2.4rem; }
+
+      .cards-visual { grid-template-columns: 1fr 1fr 1fr; }
+
+      .services-list { grid-template-columns: 1fr; }
+      .service-row:nth-child(odd),
+      .service-row:nth-child(even) { padding-left: 0; padding-right: 0; border-right: none; }
+
+      .steps-grid { grid-template-columns: 1fr 1fr; }
+      .step { border-right: none; padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .step:nth-child(2), .step:nth-child(3) { padding-left: 0; }
+      .step:last-child { padding-left: 0; }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .project-card.featured { grid-row: auto; }
+      .project-card:nth-child(n) { grid-column: auto; }
+      .projects-strip { grid-template-columns: 1fr; }
+
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+
+      nav.open .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: var(--bg);
+        padding: 1.5rem 3rem 2rem;
+        border-bottom: 1px solid var(--border);
+        gap: 1.4rem;
+      }
+
+      .projects-head { flex-direction: column; align-items: flex-start; }
+
+      footer { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .cards-visual { grid-template-columns: 1fr; }
+      .hero-stat-row { flex-direction: column; gap: 1rem; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Particles -->
-<div id="particles"></div>
-
-<!-- Navigation -->
-<nav id="navbar">
-    <a href="#hero" class="nav-brand">
-        <img src="logo.png" alt="AJs Logo">
-        <span class="nav-brand-text">ACE JACK SUITED</span>
-    </a>
-    <ul class="nav-links">
-        <li><a href="#the-hand">The Hand</a></li>
-        <li><a href="#philosophy">Philosophy</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Connect</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Open menu">
-        <span></span><span></span><span></span>
-    </button>
+<!-- ── Nav ──────────────────────────────────────────────── -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">
+    <img src="logo.png" alt="Ace Jack Suited">
+    <span class="nav-logo-text">Ace Jack Suited</span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact" class="nav-cta">Let's talk</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- Mobile menu -->
-<div class="mobile-menu" id="mobileMenu">
-    <a href="#the-hand">The Hand</a>
-    <a href="#philosophy">Philosophy</a>
-    <a href="#services">Services</a>
-    <a href="#projects">Projects</a>
-    <a href="#contact">Connect</a>
-</div>
-
-<!-- Hero -->
+<!-- ── Hero ─────────────────────────────────────────────── -->
 <section id="hero">
-    <div class="hero-bg"></div>
-    <span class="suit-mark top-left">♦</span>
-    <span class="suit-mark bot-right">♣</span>
+  <div class="hero-left">
+    <div class="hero-tag reveal">AI Innovations · Stockholm</div>
 
-    <img src="logo.png" alt="Ace Jack Suited" class="hero-logo">
+    <h1 class="hero-h1 reveal reveal-d1">
+      The AI edge,<br>
+      <em>dealt right.</em>
+    </h1>
 
-    <p class="hero-eyebrow">AI Innovations</p>
-    <h1 class="hero-title">Ace Jack <span>Suited</span></h1>
-    <p class="hero-subtitle">Playing the long game — together</p>
-
-    <p class="hero-tagline">
-        <em>Ace is the AI. Jack is the human.</em> Together we show up suited,
-        ready to play, and positioned to win — not by luck, but by
-        reading the situation, trusting the process, and making the right moves.
+    <p class="hero-sub reveal reveal-d2">
+      We help founders and companies build real leverage with AI —
+      from strategy and automation through to working products.
+      No hype. Just the hands that win.
     </p>
 
-    <div class="hero-cta">
-        <a href="#the-hand" class="btn-primary">See the Hand</a>
-        <a href="#contact" class="btn-outline">Let's Connect</a>
+    <div class="hero-actions reveal reveal-d3">
+      <a href="#services" class="btn-primary">See what we do</a>
+      <a href="#contact" class="btn-ghost">Let's talk</a>
     </div>
+  </div>
 
-    <div class="scroll-indicator">
-        <span>Scroll</span>
-        <div class="scroll-line"></div>
+  <div class="hero-right">
+    <div class="hero-suits">
+      <span class="suit suit-1">♠</span>
+      <span class="suit suit-2">♦</span>
+      <span class="suit suit-3">♣</span>
     </div>
+    <div class="hero-right-inner">
+      <img src="logo.png" alt="Ace Jack Suited" class="hero-logo">
+      <div class="hero-stat-row">
+        <div class="hero-stat">
+          <strong>8+</strong>
+          Products shipped
+        </div>
+        <div class="hero-stat">
+          <strong>01</strong>
+          Build in public
+        </div>
+        <div class="hero-stat">
+          <strong>AJ♦</strong>
+          Playing the long game
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- The Hand -->
-<section id="the-hand">
-    <div class="section-inner">
-        <p class="section-eyebrow fade-in">The Foundation</p>
-        <h2 class="section-title fade-in">The Hand We Play</h2>
-        <div class="section-divider fade-in"></div>
-        <p class="fade-in" style="color: var(--gray); font-size: 1rem; font-weight: 300; line-height: 1.8; max-width: 600px; margin: 0 auto;">
-            Two cards. Perfect together. AJ suited isn't the most glamorous hand at the table —
-            but it's one of the most consistently profitable. That's the standard we hold ourselves to.
+<!-- ── About / The Hand ──────────────────────────────────── -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="about-grid">
+      <div class="about-left">
+        <span class="eyebrow reveal">The Foundation</span>
+        <h2 class="reveal reveal-d1">
+          Two cards.<br>
+          <em>Perfect together.</em>
+        </h2>
+        <p class="reveal reveal-d2">
+          AJ suited isn't the most glamorous hand at the table — but it's
+          one of the most consistently profitable. That's the standard we hold
+          ourselves to. AI precision paired with human judgment, playing
+          the right hands, not every hand.
         </p>
-
-        <div class="hand-grid">
-            <div class="hand-card fade-in fade-in-delay-1">
-                <div class="card-rank">A</div>
-                <div class="card-suit">♠</div>
-                <div class="card-label">Ace — Artificial Intelligence</div>
-                <p class="card-desc">
-                    The power in the hand. AI that processes complexity at scale,
-                    finds the signal in noise, and plays every situation with
-                    mathematical precision. No ego. No fatigue. Just sharp execution.
-                </p>
-            </div>
-
-            <div class="hand-card fade-in fade-in-delay-2">
-                <div class="card-rank">J</div>
-                <div class="card-suit">♦</div>
-                <div class="card-label">Jack — Human Intelligence</div>
-                <p class="card-desc">
-                    The instinct in the hand. The experience to know when the odds
-                    don't tell the whole story. Creative thinking, strategic vision,
-                    and the judgment that only comes from playing real hands.
-                </p>
-            </div>
-
-            <div class="hand-card fade-in fade-in-delay-3">
-                <div class="card-rank">♣</div>
-                <div class="card-suit">Suited</div>
-                <div class="card-label">Suited — Aligned</div>
-                <p class="card-desc">
-                    The edge. When AI and human intelligence share the same suit,
-                    the possibilities multiply. Consistent wins from reading the board,
-                    and occasional flushes that change the game entirely.
-                </p>
-            </div>
+      </div>
+      <div class="cards-visual reveal reveal-d1">
+        <div class="play-card">
+          <div class="play-card-rank">A</div>
+          <div class="play-card-suit">♠</div>
+          <div class="play-card-label">Artificial Intelligence</div>
+          <p>The power in the hand. Processes complexity at scale, finds the signal in noise, executes with mathematical precision.</p>
         </div>
+        <div class="play-card">
+          <div class="play-card-rank">J</div>
+          <div class="play-card-suit">♦</div>
+          <div class="play-card-label">Human Intelligence</div>
+          <p>The instinct in the hand. Creative thinking, strategic vision, and the judgment that only comes from playing real hands.</p>
+        </div>
+        <div class="play-card">
+          <div class="play-card-rank">~</div>
+          <div class="play-card-suit">Suited</div>
+          <div class="play-card-label">Aligned</div>
+          <p>The edge. When AI and human intelligence share the same suit, the possibilities multiply beyond what either can do alone.</p>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
-<!-- Philosophy -->
-<section id="philosophy">
-    <div class="section-inner">
-        <div class="philosophy-grid">
-            <div>
-                <p class="section-eyebrow fade-in">Our Thinking</p>
-                <h2 class="section-title fade-in">Play the Long Game</h2>
-                <div class="section-divider fade-in"></div>
-
-                <blockquote class="philosophy-quote fade-in">
-                    The best hands win over time, not over one pot.
-                </blockquote>
-
-                <p class="philosophy-text fade-in">
-                    AJ suited doesn't need to win every hand. It wins <em>the right hands</em> —
-                    extracting value methodically, folding where others bleed chips,
-                    and recognizing the moments where patience creates outsized opportunity.
-                </p>
-                <p class="philosophy-text fade-in">
-                    That's how we approach AI. Not as a silver bullet that solves everything at once,
-                    but as a <em>compounding edge</em> — built deliberately, applied precisely,
-                    and refined with every iteration. Small wins accumulate. Then suddenly you're
-                    holding a stack nobody expected.
-                </p>
-                <p class="philosophy-text fade-in">
-                    We believe the future belongs to those who understand both sides of the table:
-                    the <em>machine that never blinks</em> and the <em>human who knows when to trust the gut</em>.
-                </p>
-            </div>
-
-            <div class="philosophy-visual fade-in">
-                <div class="ring-container">
-                    <div class="ring ring-1"></div>
-                    <div class="ring ring-2"></div>
-                    <div class="ring ring-3"></div>
-                    <div class="ring-center">
-                        <span class="ring-center-text">AJ♦</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Services -->
+<!-- ── Services ──────────────────────────────────────────── -->
 <section id="services">
-    <div class="section-inner">
-        <div class="services-intro">
-            <p class="section-eyebrow fade-in">What We Do</p>
-            <h2 class="section-title fade-in">At the Table</h2>
-            <div class="section-divider fade-in"></div>
-            <p class="fade-in">
-                We help companies and founders find their edge with AI —
-                from initial strategy through to working systems. Every engagement
-                is hands-on, outcome-focused, and built around what actually wins.
-            </p>
-        </div>
-
-        <div class="services-grid">
-            <div class="service-item fade-in fade-in-delay-1">
-                <div class="service-number">01</div>
-                <div class="service-content">
-                    <h3>AI Strategy & Roadmapping</h3>
-                    <p>Read the board before you bet. We help you identify where AI creates real leverage in your business — and where it doesn't. No hype, just actionable direction.</p>
-                </div>
-            </div>
-
-            <div class="service-item fade-in fade-in-delay-2">
-                <div class="service-number">02</div>
-                <div class="service-content">
-                    <h3>Automation & Workflow Intelligence</h3>
-                    <p>Find the chips on the table. We map your operations to surface where AI can eliminate friction, accelerate decision-making, and free your team to do what matters.</p>
-                </div>
-            </div>
-
-            <div class="service-item fade-in fade-in-delay-3">
-                <div class="service-number">03</div>
-                <div class="service-content">
-                    <h3>AI Product Development</h3>
-                    <p>From proof-of-concept to production. We build AI-powered products that work in the real world — pragmatic, scalable, and designed to deliver value from day one.</p>
-                </div>
-            </div>
-
-            <div class="service-item fade-in fade-in-delay-4">
-                <div class="service-number">04</div>
-                <div class="service-content">
-                    <h3>Human-AI Integration</h3>
-                    <p>Suited means aligned. We help teams and leaders develop the skills and systems to work effectively alongside AI — building capability, not dependency.</p>
-                </div>
-            </div>
-        </div>
+  <div class="section-wrap">
+    <div class="services-head">
+      <div>
+        <span class="eyebrow reveal">What We Do</span>
+        <h2 class="reveal reveal-d1">At the table</h2>
+      </div>
+      <p class="reveal reveal-d2">
+        We help companies and founders find their edge with AI —
+        from initial strategy through to working systems. Every engagement
+        is hands-on, outcome-focused, and built around what actually wins.
+      </p>
     </div>
+
+    <div class="services-list">
+      <div class="service-row reveal">
+        <div class="service-num">01</div>
+        <div>
+          <h3>AI Strategy &amp; Roadmapping</h3>
+          <p>Read the board before you bet. We identify where AI creates real leverage in your business — and where it doesn't. No hype, just actionable direction.</p>
+        </div>
+      </div>
+      <div class="service-row reveal reveal-d1">
+        <div class="service-num">02</div>
+        <div>
+          <h3>Automation &amp; Workflow Intelligence</h3>
+          <p>Find the chips on the table. We map your operations to surface where AI can eliminate friction, accelerate decisions, and free your team to do what matters.</p>
+        </div>
+      </div>
+      <div class="service-row reveal reveal-d2">
+        <div class="service-num">03</div>
+        <div>
+          <h3>AI Product Development</h3>
+          <p>From proof-of-concept to production. We build AI-powered products that work in the real world — pragmatic, scalable, and designed to deliver value from day one.</p>
+        </div>
+      </div>
+      <div class="service-row reveal reveal-d3">
+        <div class="service-num">04</div>
+        <div>
+          <h3>Human-AI Integration</h3>
+          <p>Suited means aligned. We help teams develop the skills and systems to work effectively alongside AI — building capability, not dependency.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Approach -->
+<!-- ── Approach ───────────────────────────────────────────── -->
 <section id="approach">
-    <div class="section-inner">
-        <p class="section-eyebrow fade-in">How We Play</p>
-        <h2 class="section-title fade-in">The Playbook</h2>
-        <div class="section-divider" style="margin: 0 auto 1rem;"></div>
-
-        <div class="approach-steps">
-            <div class="approach-step fade-in fade-in-delay-1">
-                <div class="step-number"><span>01</span></div>
-                <h3>Read the Table</h3>
-                <p>Understand your situation deeply before making a move. We start every engagement with a thorough analysis of your landscape, goals, and constraints.</p>
-            </div>
-            <div class="approach-step fade-in fade-in-delay-2">
-                <div class="step-number"><span>02</span></div>
-                <h3>Find the Edge</h3>
-                <p>Identify where AI creates genuine advantage. Not every hand is worth playing — we focus energy where the expected value is clear and positive.</p>
-            </div>
-            <div class="approach-step fade-in fade-in-delay-3">
-                <div class="step-number"><span>03</span></div>
-                <h3>Make the Play</h3>
-                <p>Execute with precision. Build the solution, automate the process, or ship the product. We move fast but thoughtfully, testing as we go.</p>
-            </div>
-            <div class="approach-step fade-in fade-in-delay-4">
-                <div class="step-number"><span>04</span></div>
-                <h3>Stack the Chips</h3>
-                <p>Measure outcomes and compound the learning. Good players review every session. We build feedback loops that make the next play better than the last.</p>
-            </div>
-        </div>
+  <div class="section-wrap">
+    <div class="approach-head">
+      <div>
+        <span class="eyebrow reveal">How We Play</span>
+        <h2 class="reveal reveal-d1">The playbook</h2>
+      </div>
+      <p class="reveal reveal-d2">
+        Good players don't act on impulse. They read the table, find their edge,
+        execute with precision, and compound the learning every session.
+      </p>
     </div>
+    <div class="steps-grid">
+      <div class="step reveal">
+        <span class="step-n">01</span>
+        <h3>Read the Table</h3>
+        <p>Understand your situation deeply before making a move. Every engagement starts with a thorough analysis of your landscape, goals, and constraints.</p>
+      </div>
+      <div class="step reveal reveal-d1">
+        <span class="step-n">02</span>
+        <h3>Find the Edge</h3>
+        <p>Identify where AI creates genuine advantage. Not every hand is worth playing — we focus energy where the expected value is clear and positive.</p>
+      </div>
+      <div class="step reveal reveal-d2">
+        <span class="step-n">03</span>
+        <h3>Make the Play</h3>
+        <p>Execute with precision. Build the solution, automate the process, ship the product. We move fast but thoughtfully, testing as we go.</p>
+      </div>
+      <div class="step reveal reveal-d3">
+        <span class="step-n">04</span>
+        <h3>Stack the Chips</h3>
+        <p>Measure outcomes and compound the learning. We build feedback loops that make the next play better than the last.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Projects -->
+<!-- ── Projects ───────────────────────────────────────────── -->
 <section id="projects">
-    <div class="section-inner">
-        <div class="projects-header">
-            <div>
-                <p class="section-eyebrow fade-in">Hands Played</p>
-                <h2 class="section-title fade-in">Projects</h2>
-                <div class="section-divider fade-in"></div>
-            </div>
-            <a href="https://buildinpublic-logg.pages.dev/" class="btn-outline fade-in" target="_blank">
-                Read the Journey →
-            </a>
-        </div>
-
-        <div class="projects-grid">
-            <div class="project-card featured fade-in">
-                <div class="project-icon">🤖</div>
-                <span class="project-tag">Autonomous Agent</span>
-                <h3>Moltbot</h3>
-                <p>
-                    An autonomous AI agent running on a private VPS — integrated with Telegram for
-                    voice interaction and real-time responses. Built to run independently, around the clock,
-                    without human intervention. A step toward truly agentic AI infrastructure.
-                </p>
-                <a href="https://buildinpublic-logg.pages.dev/" class="project-link" target="_blank">
-                    Read the build log
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-
-            <div class="project-card fade-in fade-in-delay-1">
-                <div class="project-icon">🛒</div>
-                <span class="project-tag">AI Product</span>
-                <h3>QuestBox</h3>
-                <p>
-                    An AI-driven e-commerce engine rebuilt from the ground up with Claude Code.
-                    From concept to deployed product in record time.
-                </p>
-                <a href="https://questbox.vercel.app/" class="project-link" target="_blank">
-                    View project
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-
-            <div class="project-card fade-in fade-in-delay-1">
-                <div class="project-icon">🎵</div>
-                <span class="project-tag">Rapid Build</span>
-                <h3>Last Gig Finder</h3>
-                <p>
-                    A music discovery app built in under four minutes with AI.
-                    Proof that the speed of idea-to-product has fundamentally changed.
-                </p>
-                <a href="https://bltg85.github.io/last-gig-finder/" class="project-link" target="_blank">
-                    View project
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-
-            <div class="project-card fade-in fade-in-delay-2">
-                <div class="project-icon">🏊</div>
-                <span class="project-tag">Micro SaaS</span>
-                <h3>VadKostarBadet.se</h3>
-                <p>
-                    A niche consumer tool that went through real product iteration — AdSense feedback,
-                    user improvements, and the full cycle of building in public.
-                </p>
-                <a href="https://vadkostarbadet.se/" class="project-link" target="_blank">
-                    View project
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-
-            <div class="project-card fade-in fade-in-delay-2">
-                <div class="project-icon">🎉</div>
-                <span class="project-tag">Consumer Tool</span>
-                <h3>KlaraPaket</h3>
-                <p>
-                    Free printable activity kits for kids aged 5–10. Themed treasure hunts and party setups
-                    ready to download, print, and run at home. No subscription required.
-                </p>
-                <a href="https://klarapaket.pages.dev/" class="project-link" target="_blank">
-                    View project
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-
-            <div class="project-card fade-in fade-in-delay-3">
-                <div class="project-icon">☀️</div>
-                <span class="project-tag">Collaboration Tool</span>
-                <h3>Sommarsemester 2026</h3>
-                <p>
-                    A planning tool for three families coordinating a European summer trip — comparing
-                    options, AI recommendations, and pricing in one shared view.
-                </p>
-                <a href="https://bltg85.github.io/sommarsemester-2026/" class="project-link" target="_blank">
-                    View project
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-
-            <div class="project-card fade-in fade-in-delay-3">
-                <div class="project-icon">♟️</div>
-                <span class="project-tag">Web App</span>
-                <h3>Dominion Modern</h3>
-                <p>
-                    A modern web take on the classic card game Dominion —
-                    built and shipped as part of the ongoing build-in-public journey.
-                </p>
-                <a href="https://bltg85.github.io/dominion-modern/" class="project-link" target="_blank">
-                    View project
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-
-            <div class="project-card fade-in fade-in-delay-4">
-                <div class="project-icon">🧠</div>
-                <span class="project-tag">In Play</span>
-                <h3>AI Council</h3>
-                <p>
-                    A multi-layer AI system with image processing capabilities — currently in development.
-                    The next hand is being dealt.
-                </p>
-                <a href="#contact" class="project-link">
-                    Get in touch
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
-        </div>
+  <div class="section-wrap">
+    <div class="projects-head">
+      <div>
+        <span class="eyebrow reveal">Hands Played</span>
+        <h2 class="reveal reveal-d1">Projects</h2>
+      </div>
+      <a href="https://buildinpublic-logg.pages.dev/" class="link-arrow reveal" target="_blank">
+        Read the build log
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
+
+    <div class="projects-grid">
+      <!-- Featured -->
+      <a href="https://buildinpublic-logg.pages.dev/" class="project-card featured reveal" target="_blank">
+        <span class="proj-tag">Autonomous Agent</span>
+        <h3>Moltbot</h3>
+        <p>
+          An autonomous AI agent running on a private VPS — integrated with Telegram for
+          voice interaction and real-time responses. Built to run independently, around the clock,
+          without human intervention. A concrete step toward truly agentic AI infrastructure.
+        </p>
+        <span class="proj-link">
+          Read the build log
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+
+      <a href="https://questbox.vercel.app/" class="project-card reveal reveal-d1" target="_blank">
+        <span class="proj-tag">AI Product</span>
+        <h3>QuestBox</h3>
+        <p>AI-driven e-commerce engine rebuilt from the ground up with Claude Code. Concept to deployed product in record time.</p>
+        <span class="proj-link">View project <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="https://bltg85.github.io/last-gig-finder/" class="project-card reveal reveal-d2" target="_blank">
+        <span class="proj-tag">Rapid Build</span>
+        <h3>Last Gig Finder</h3>
+        <p>A music discovery app built in under four minutes with AI. Proof that the speed of idea-to-product has fundamentally changed.</p>
+        <span class="proj-link">View project <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="https://vadkostarbadet.se/" class="project-card reveal reveal-d1" target="_blank">
+        <span class="proj-tag">Micro SaaS</span>
+        <h3>VadKostarBadet.se</h3>
+        <p>A niche consumer tool that went through real product iteration — AdSense, user feedback, and the full cycle of building in public.</p>
+        <span class="proj-link">View project <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="https://klarapaket.pages.dev/" class="project-card reveal reveal-d2" target="_blank">
+        <span class="proj-tag">Consumer Tool</span>
+        <h3>KlaraPaket</h3>
+        <p>Free printable activity kits for kids aged 5–10. Themed treasure hunts and party setups — download, print, and run. No subscription.</p>
+        <span class="proj-link">View project <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </a>
+    </div>
+
+    <!-- Strip: remaining projects -->
+    <div class="projects-strip">
+      <a href="https://bltg85.github.io/sommarsemester-2026/" class="project-card reveal" target="_blank">
+        <span class="proj-tag">Collaboration Tool</span>
+        <h3>Sommarsemester 2026</h3>
+        <p>Planning tool for three families coordinating a European summer trip — comparing options, AI recommendations, and pricing in one shared view.</p>
+        <span class="proj-link">View project <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="https://bltg85.github.io/dominion-modern/" class="project-card reveal reveal-d1" target="_blank">
+        <span class="proj-tag">Web App</span>
+        <h3>Dominion Modern</h3>
+        <p>A modern web take on the classic card game Dominion — built and shipped as part of the ongoing build-in-public journey.</p>
+        <span class="proj-link">View project <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </a>
+
+      <a href="#contact" class="project-card reveal reveal-d2">
+        <span class="proj-tag">In Play</span>
+        <h3>AI Council</h3>
+        <p>A multi-layer AI system with image processing capabilities. Currently in development — the next hand is being dealt.</p>
+        <span class="proj-link">Get in touch <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </a>
+    </div>
+  </div>
 </section>
 
-<!-- Contact -->
+<!-- ── Contact ────────────────────────────────────────────── -->
 <section id="contact">
-    <div class="section-inner">
-        <p class="section-eyebrow fade-in">Let's Play</p>
-        <h2 class="section-title fade-in">Ready to Sit Down?</h2>
-        <div class="section-divider" style="margin: 0 auto 1.5rem;"></div>
-        <p class="contact-tagline fade-in">
-            The best outcomes happen when the right people are at the same table.
-            If you're building something with AI, or trying to figure out where to start —
-            let's talk.
+  <div class="section-wrap">
+    <div class="contact-grid">
+      <div class="contact-left">
+        <span class="eyebrow reveal">Let's Play</span>
+        <h2 class="reveal reveal-d1">Ready to sit down?</h2>
+        <p class="reveal reveal-d2">
+          The best outcomes happen when the right people are at the same table.
+          If you're building something with AI, or trying to figure out where to start — let's talk.
         </p>
+        <a href="https://buildinpublic-logg.pages.dev/" class="btn-primary reveal reveal-d3" target="_blank">
+          Read the build log
+        </a>
+      </div>
 
-        <div class="contact-ways">
-            <a href="https://buildinpublic-logg.pages.dev/" class="contact-card fade-in fade-in-delay-1" target="_blank">
-                <div class="contact-card-icon">✍️</div>
-                <h4>The Blog</h4>
-                <p>Build in Public — logg</p>
-            </a>
-        </div>
+      <div class="contact-right reveal reveal-d1">
+        <a href="https://buildinpublic-logg.pages.dev/" class="contact-item" target="_blank">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          </div>
+          <div class="contact-item-text">
+            <strong>Build in Public — Logg</strong>
+            <span>Follow the full journey, unfiltered</span>
+          </div>
+          <span class="contact-item-arrow">→</span>
+        </a>
 
-        <p class="fade-in" style="font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.2em; color: var(--gray-dark); text-transform: uppercase;">
-            ♠ &nbsp; AJ Suited. AI Innovations. &nbsp; ♦
-        </p>
+        <a href="https://buildinpublic-logg.pages.dev/" class="contact-item" target="_blank">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="contact-item-text">
+            <strong>Start a conversation</strong>
+            <span>Reach out via the blog</span>
+          </div>
+          <span class="contact-item-arrow">→</span>
+        </a>
+      </div>
     </div>
+  </div>
 </section>
 
-<!-- Footer -->
+<!-- ── Footer ─────────────────────────────────────────────── -->
 <footer>
-    <div class="footer-brand">
-        <img src="logo.png" alt="AJs">
-        <span class="footer-brand-text">ACE JACK SUITED</span>
-    </div>
-    <div class="footer-center">
-        AI Innovations · Playing the long game
-    </div>
-    <div class="footer-right">
-        © 2026 Ace Jack Suited
-    </div>
+  <div class="footer-brand">
+    <img src="logo.png" alt="Ace Jack Suited">
+    <span>Ace Jack Suited</span>
+  </div>
+  <div class="footer-copy">© 2026 Ace Jack Suited</div>
+  <div class="footer-tagline">AI Innovations · Playing the long game</div>
 </footer>
 
 <script>
-    // Particle system
-    const container = document.getElementById('particles');
-    const PARTICLE_COUNT = 30;
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        const size = Math.random() * 3 + 1;
-        p.style.cssText = `
-            width: ${size}px;
-            height: ${size}px;
-            left: ${Math.random() * 100}%;
-            animation-duration: ${Math.random() * 15 + 12}s;
-            animation-delay: ${Math.random() * 15}s;
-        `;
-        container.appendChild(p);
-    }
+  // Mobile nav toggle
+  const toggle = document.getElementById('nav-toggle');
+  toggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
 
-    // Navbar scroll effect
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-        navbar.classList.toggle('scrolled', window.scrollY > 60);
+  // Close mobile nav on link click
+  document.querySelectorAll('#nav-links a').forEach(a => {
+    a.addEventListener('click', () => nav.classList.remove('open'));
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
     });
+  }, { threshold: 0.12 });
 
-    // Hamburger menu
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    hamburger.addEventListener('click', () => {
-        const isOpen = mobileMenu.classList.toggle('open');
-        hamburger.classList.toggle('open', isOpen);
-        document.body.style.overflow = isOpen ? 'hidden' : '';
-    });
-
-    mobileMenu.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            hamburger.classList.remove('open');
-            document.body.style.overflow = '';
-        });
-    });
-
-    // Fade-in on scroll
-    const fadeEls = document.querySelectorAll('.fade-in');
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('visible');
-                    observer.unobserve(e.target);
-                }
-            });
-        },
-        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-    );
-
-    fadeEls.forEach(el => observer.observe(el));
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', (e) => {
-            const target = document.querySelector(a.getAttribute('href'));
-            if (target) {
-                e.preventDefault();
-                target.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
-
 </body>
 </html>
